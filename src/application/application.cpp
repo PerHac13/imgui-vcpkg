@@ -3,7 +3,9 @@
 #include <imgui.h>
 
 Application::Application(int width, int height, const std::string &title)
-    : window(nullptr), should_close(false), show_demo_window(true), show_hello_world(true), checkbox_value(false), slider_value(0.5f), window_width(width), window_height(height), window_title(title)
+    : window(nullptr), should_close(false), show_demo_window(true), show_hello_world(true),
+      checkbox_value(false), slider_value(0.5f), window_width(width), window_height(height),
+      window_title(title)
 {
     init();
 }
@@ -45,6 +47,7 @@ void Application::init()
     ImGui::CreateContext();
     ImGuiIO &io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+    io.ConfigWindowsMoveFromTitleBarOnly = true;
 
     ImGui::StyleColorsDark();
 
@@ -73,43 +76,46 @@ void Application::update()
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
-    if (ImGui::BeginMainMenuBar())
+    const ImGuiViewport *viewport = ImGui::GetMainViewport();
+    ImGui::SetNextWindowPos(viewport->WorkPos);
+    ImGui::SetNextWindowSize(viewport->WorkSize);
+    ImGui::SetNextWindowViewport(viewport->ID);
+
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking |
+                                    ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse |
+                                    ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
+                                    ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+    ImGui::Begin("DockSpace", nullptr, window_flags);
+    ImGui::PopStyleVar();
+
+    ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+    ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode);
+
+    if (ImGui::BeginMenuBar())
     {
         if (ImGui::BeginMenu("File"))
         {
             if (ImGui::MenuItem("Exit"))
-            {
                 should_close = true;
-            }
             ImGui::EndMenu();
         }
-        ImGui::EndMainMenuBar();
+        ImGui::EndMenuBar();
     }
 
     if (show_demo_window)
         ImGui::ShowDemoWindow(&show_demo_window);
 
-    ImGui::Begin("Hello World Window", &show_hello_world);
+    ImGui::Begin("Hello World Window", &show_hello_world, ImGuiWindowFlags_NoCollapse);
     ImGui::Text("Hello, World!");
-
     if (ImGui::Button("Close"))
-    {
         show_hello_world = false;
-    }
-
     ImGui::Checkbox("Checkbox", &checkbox_value);
     ImGui::SliderFloat("Slider", &slider_value, 0.0f, 1.0f);
-
-    if (ImGui::BeginPopupContextWindow())
-    {
-        if (ImGui::MenuItem("Close Window"))
-        {
-            show_hello_world = false;
-        }
-        ImGui::EndPopup();
-    }
-
     ImGui::End();
+
+    ImGui::End(); // DockSpace
 }
 
 void Application::render()
@@ -121,7 +127,6 @@ void Application::render()
     glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
     glClear(GL_COLOR_BUFFER_BIT);
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
     glfwSwapBuffers(window);
 }
 
