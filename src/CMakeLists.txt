@@ -13,6 +13,7 @@ target_link_libraries(${PROJECT_NAME}
         OpenGL::GL
         glfw
         imgui::imgui
+        webview::core
 )
 
 # Copy any required runtime dependencies
