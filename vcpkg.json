@@ -2,11 +2,38 @@
   "name": "imgui-glfw-example",
   "version": "1.0.0",
   "dependencies": [
+    "asyncplusplus",
+    "boost-algorithm",
+    "boost-lexical-cast",
+    "boost-random",
+    "catch2",
+    "cpp-httplib",
+    "draco",
+    "expected-lite",
+    "glfw3",
+    "glm",
+    "gtest",
     {
       "name": "imgui",
       "features": ["docking-experimental", "glfw-binding", "opengl3-binding"]
     },
-    "glfw3",
-    "opengl"
+    "ktx",
+    "libjpeg-turbo",
+    "libmorton",
+    "libzip",
+    "magic-enum",
+    "meshoptimizer",
+    "opengl",
+    "rapidjson",
+    "s2geometry",
+    "spdlog",
+    "sqlite3",
+    "tinyxml2",
+    "uriparser",
+    "zlib-ng",
+    "earcut-hpp",
+    "stb",
+    "modp-base64",
+    "picosha2"
   ]
 }
