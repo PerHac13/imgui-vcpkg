@@ -20,12 +20,17 @@ target_link_libraries(${PROJECT_NAME}
         imgui::imgui
         Async++
         # stringencoders::modp_b64
-        Cesium3DTiles
+        CesiumAsync
+        CesiumIonClient
         CesiumGeometry
         CesiumGeospatial
         CesiumGltf
         CesiumRasterOverlays
+        CesiumUtility
+        CesiumJsonReader
+        CesiumJsonWriter
         tinyxml2::tinyxml2
+        glm::glm
         # ${earcut_target} # Use the resolved earcut target
 )
 

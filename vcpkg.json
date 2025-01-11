@@ -34,6 +34,7 @@
     "earcut-hpp",
     "stb",
     "modp-base64",
-    "picosha2"
+    "picosha2",
+    "glm"
   ]
 }
